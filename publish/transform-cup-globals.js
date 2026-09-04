@@ -1,10 +1,8 @@
 /*
 Copyright (c) Uber Technologies, Inc.
-
 This source code is licensed under the MIT license found in the
 LICENSE file in the root directory of this source tree.
 */
-
 /* eslint-env node */
 
 module.exports = (babel) => {
@@ -13,10 +11,10 @@ module.exports = (babel) => {
   const buildAst = babel.template(`
   typeof document !== 'undefined'
 `);
-
   const buildAst2 = babel.template(`
   typeof document === 'undefined'
 `);
+
   const targetMap = {
     __NODE__: buildAst2({}),
     __BROWSER__: buildAst({}),
@@ -35,10 +33,8 @@ module.exports = (babel) => {
         if (name !== '__DEV__' && name !== '__NODE__' && name !== '__BROWSER__') {
           return;
         }
-        if (path.parent.type === 'MemberExpression') {
-          return;
-        }
-        if (path.parent.type === 'ClassMethod') {
+        const parentType = path.parent.type;
+        if (parentType === 'MemberExpression' || parentType === 'ClassMethod') {
           return;
         }
         if (path.isPure()) {
